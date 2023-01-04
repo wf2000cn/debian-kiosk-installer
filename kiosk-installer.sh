@@ -7,7 +7,7 @@ apt-get update
 apt-get install \
 	unclutter \
     xorg \
-    chromium \
+#   chromium \
     openbox \
     lightdm \
     locales \
@@ -42,6 +42,7 @@ fi
 cat > /etc/lightdm/lightdm.conf << EOF
 [SeatDefaults]
 autologin-user=kiosk
+user-session=openbox
 EOF
 
 # create autostart
@@ -50,11 +51,6 @@ if [ -e "/home/kiosk/.config/openbox/autostart" ]; then
 fi
 cat > /home/kiosk/.config/openbox/autostart << EOF
 #!/bin/bash
-
-unclutter -idle 0.1 -grab -root &
-
-while :
-do
   chromium \
     --no-first-run \
     --start-maximized \
@@ -67,9 +63,7 @@ do
     --disable-save-password-bubble \
     --disable-session-crashed-bubble \
     --incognito \
-    --kiosk "https://neave.tv/"
-  sleep 5
-done &
+    --kiosk "http://localhost:8080" &
 EOF
 
 echo "Done!"
